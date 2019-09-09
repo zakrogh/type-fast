@@ -1,22 +1,40 @@
-import $ from 'jquery';
-import 'bootstrap';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import './styles.css';
-// let blah = setInterval(function(){
-//   console.log("test");
-// }, 5000);
-//
-// setTimeout(function(){
-//   clearTimeout(blah);
-//   console.log("test2");
-// }, 3000);
-$(document).ready(function(){
-  let ctx = $("#maincanvas");
-  let input = $("#userInput")
-  $(".mainform").submit(function(event){
-    event.preventDefault();
-    console.log(input.val());
-    input.val("");
-  });
+var context;
+var text = "";
+var textDirection ="";
+const BOARDWIDTH = 900;
+const BOARDHEIGHT = 600;
 
+$(function()
+{
+    context = document.getElementById("maincanvas").getContext("2d");
+    setInterval(setInterval("animate()", 10), 1000);
+
+    textDirection ="right";
+    textXpos = 5;
+    text = "test text";
 });
+
+function animate() {
+    // Clear screen
+    context.clearRect(0, 0, BOARDWIDTH, BOARDHEIGHT);
+    context.globalAlpha = 1;
+    context.fillStyle = '#000';
+    context.fillRect(0, 0, BOARDWIDTH, BOARDHEIGHT);
+
+    var metrics = context.measureText(text);
+    var textWidth = metrics.width;
+
+    if (textDirection == "right") {
+        textXpos += 2;
+
+        if (textXpos > BOARDWIDTH - textWidth) {
+            return;
+            console.log(text);
+        }
+    }
+
+    context.font = '20px Times';
+    context.fillStyle = '#fff';
+    context.textBaseline = 'top';
+    context.fillText  ( text, textXpos, 180);
+  }
