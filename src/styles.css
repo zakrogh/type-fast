@@ -1,0 +1,9 @@
+body{
+  background-color: rgba(0, 125, 200, 0.3);
+}
+canvas{
+  background: black;
+}
+input{
+  max-width: 500px;
+}
