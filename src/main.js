@@ -6,6 +6,10 @@ import './styles.css';
 var canvas;
 var ctx;
 var words = [];
+//dictionary:
+//https://www.espressoenglish.net/1000-most-common-words-in-english/
+//var dictionary = "Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua Ut enim ad minim veniam quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur Excepteur sint occaecat cupidatat non proident sunt in culpa qui officia deserunt mollit anim id est laborum".toLowerCase().split(" ");
+var missed = 0;
 const BOARDWIDTH = 900;
 const BOARDHEIGHT = 600;
 //default:5 === move 5 pixels per animation loop
@@ -15,10 +19,11 @@ function word(){
   this.x = -100;
   this.y = Math.floor(Math.random() * 560 + 20);
   this.moveSpeed = Math.random() * MOVESPEED + 1;
-  this.text = "" + this.y;
+  //this.text = "" + this.y;
+  this.text = dictionary[Math.floor(Math.random() * dictionary.length)];
   this.textWidth = ctx.measureText(this.text).width;
   this.draw = function(){
-    ctx.font = '20px Times';
+    ctx.font = '25px Verdana';
     ctx.fillStyle = '#FFF';
     ctx.fillText(this.text, this.x, this.y);
   }
@@ -27,14 +32,18 @@ function word(){
     this.draw();
     if(this.x > BOARDWIDTH - this.textWidth){
       this.delete();
+      missed++;
+      $(".outputMissed").text("Missed: " + missed);
       console.log(words);
     }
+    this.draw();
 
   }
   this.delete = function(){
     for(let i = 0; i < words.length; i++){
       if(words[i] === this){
         words.splice(i,1);
+        return;
       }
     }
   }
@@ -58,8 +67,9 @@ var createWord = function(){
 }
 
 var gameLoop = function(){
+  //webpack freaks out if the functions aren't declared in the interval
   setInterval(function () {createWord()}, 1000);
-  setInterval(function () {animate()}, 17);
+  setInterval(function () {animate()}, 20);
 }
 var findWord = function(s){
   for(let i = 0; i < words.length; i++){
@@ -78,9 +88,24 @@ $(document).ready(function(){
   canvas.height = BOARDHEIGHT;
 
   $("#startgame").click(function(){
+    dictionary = dictionary.toLowerCase().split("\n");
+
+    for(let i = 0; i < dictionary.length; i++){
+      dictionary[i] = dictionary[i].replace(/[^a-z]/g, "");
+    }
     gameLoop();
   });
-
+  $("#inputFile").on("change", function(event){
+    let file = event.target.files[0];
+    if(!file){
+      return;
+    }
+    let reader = new FileReader();
+    reader.onload = function(event){
+      dictionary = event.target.result;
+    };
+    reader.readAsText(file);
+  });
   $(".mainform").submit(function(event){
     event.preventDefault();
     let userInput = $("#userInput").val();

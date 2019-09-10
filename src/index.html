@@ -4,10 +4,7 @@
     <meta charset="utf-8">
     <title>Type Speed</title>
   </head>
-  <!-- <link rel="stylesheet" href="bootstrap.css">
-  <link rel="stylesheet" href="styles.css">
-  <script src="jquery-3.4.1.js" charset="utf-8"></script>
-  <script src="main.js" charset="utf-8"></script> -->
+
   <body>
     <div class="container">
       <div class="jumbotron">
@@ -15,15 +12,18 @@
       </div>
       <button type="button" class="btn btn-success" id="startgame" name="button">Start Game</button>
       <br><br>
-      <!-- <input type="file" id="inputFile" name="" value=""> -->
+      <input type="file" id="inputFile" name="" value="">
       <canvas id="maincanvas" width="900" height="600"></canvas>
       <form class="mainform" action="index.html" method="post" autocomplete="off">
         <div class="input-group-mb-3">
           <input type="text" class="form-control" id="userInput" value="" autofocus>
         </div>
       </form>
-      <div class="well output">
+      <div class="output">
         Score: 0
+      </div>
+      <div class="outputMissed">
+        Missed: 0
       </div>
     </div>
   </body>
