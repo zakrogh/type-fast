@@ -3,6 +3,7 @@ import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './styles.css';
 
+//this global stuff should all be refactored
 var canvas;
 var ctx;
 var words = [];
@@ -62,6 +63,9 @@ const isGameOver = function(){
   if(numLives === 0){
     clearInterval(wordCreator);
     clearInterval(wordAnimator);
+    ctx.font = '70px Helvetica';
+    ctx.fillStyle = 'red';
+    ctx.fillText("GAME OVER", ctx.measureText("GAME OVER").width/2, 250);
   }
 }
 const clearScreen = function(){
@@ -109,6 +113,7 @@ $(document).ready(function(){
     for(let i = 0; i < dictionary.length; i++){
       dictionary[i] = dictionary[i].replace(/[^a-z]/g, "");
     }
+    $("#userInput").focus();
     gameLoop();
   });
   $("#inputFile").on("change", function(event){
