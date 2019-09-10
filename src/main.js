@@ -1,13 +1,20 @@
+import $ from 'jquery';
+import 'bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import './styles.css';
+
 var canvas;
 var ctx;
 var words = [];
 const BOARDWIDTH = 900;
 const BOARDHEIGHT = 600;
+//default:5 === move 5 pixels per animation loop
+const MOVESPEED = 5;
 
 function word(){
   this.x = -100;
   this.y = Math.floor(Math.random() * 560 + 20);
-  this.moveSpeed = Math.random() * 5 + 1;
+  this.moveSpeed = Math.random() * MOVESPEED + 1;
   this.text = "" + this.y;
   this.textWidth = ctx.measureText(this.text).width;
   this.draw = function(){
@@ -32,29 +39,29 @@ function word(){
     }
   }
 }
-function clearScreen(){
+var clearScreen = function(){
   ctx.clearRect(0, 0, BOARDWIDTH, BOARDHEIGHT);
   ctx.globalAlpha = 1;
   ctx.fillStyle = '#000';
   ctx.fillRect(0, 0, BOARDWIDTH, BOARDHEIGHT);
 }
 
-function animate(){
+var animate = function(){
   clearScreen();
   for(let i = 0; i < words.length; i++){
     words[i].move();
   }
 }
-function createWord(){
-  temp = new word();
+var createWord = function(){
+  let temp = new word();
   words.push(temp);
 }
 
-function gameLoop(){
-  setInterval("createWord()", 1000);
-  setInterval("animate()", 17);
+var gameLoop = function(){
+  setInterval(function () {createWord()}, 1000);
+  setInterval(function () {animate()}, 17);
 }
-function findWord(s){
+var findWord = function(s){
   for(let i = 0; i < words.length; i++){
     if(s === words[i].text){
       words[i].delete();
