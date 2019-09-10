@@ -11,3 +11,7 @@ input{
   max-width: 150px;
   font-size: 20px;
 }
+.btn-danger{
+  min-height: 40px;
+  min-width: 40px;
+}

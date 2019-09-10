@@ -6,10 +6,13 @@ import './styles.css';
 var canvas;
 var ctx;
 var words = [];
+var wordCreator;
+var wordAnimator;
 //dictionary:
 //https://www.espressoenglish.net/1000-most-common-words-in-english/
 var dictionary; //= "Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua Ut enim ad minim veniam quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur Excepteur sint occaecat cupidatat non proident sunt in culpa qui officia deserunt mollit anim id est laborum".toLowerCase().split(" ");
 var missed = 0;
+var numLives = 5;
 const BOARDWIDTH = 900;
 const BOARDHEIGHT = 600;
 //default:5 === move 5 pixels per animation loop
@@ -31,9 +34,12 @@ function word(){
     this.x += this.moveSpeed;
     this.draw();
     if(this.x > BOARDWIDTH - this.textWidth){
-      this.delete();
       missed++;
-      $(".outputMissed").text("Missed: " + missed);
+      subtractLife(numLives);
+      numLives--;
+      isGameOver();
+      //$(".outputMissed").text("Missed: " + missed);
+      this.delete();
       console.log(words);
     }
     this.draw();
@@ -48,30 +54,40 @@ function word(){
     }
   }
 }
-var clearScreen = function(){
+const subtractLife = function(num){
+  console.log(num);
+  $("#life" + num).fadeOut();
+}
+const isGameOver = function(){
+  if(numLives === 0){
+    clearInterval(wordCreator);
+    clearInterval(wordAnimator);
+  }
+}
+const clearScreen = function(){
   ctx.clearRect(0, 0, BOARDWIDTH, BOARDHEIGHT);
   ctx.globalAlpha = 1;
   ctx.fillStyle = '#000';
   ctx.fillRect(0, 0, BOARDWIDTH, BOARDHEIGHT);
 }
 
-var animate = function(){
+const animate = function(){
   clearScreen();
   for(let i = 0; i < words.length; i++){
     words[i].move();
   }
 }
-var createWord = function(){
+const createWord = function(){
   let temp = new word();
   words.push(temp);
 }
 
-var gameLoop = function(){
+const gameLoop = function(){
   //webpack freaks out if the functions aren't declared in the interval
-  setInterval(function () {createWord()}, 1000);
-  setInterval(function () {animate()}, 20);
+  wordCreator = setInterval(function () {createWord()}, 1000);
+  wordAnimator = setInterval(function () {animate()}, 20);
 }
-var findWord = function(s){
+const findWord = function(s){
   for(let i = 0; i < words.length; i++){
     if(s === words[i].text){
       words[i].delete();
