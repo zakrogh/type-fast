@@ -14,8 +14,11 @@ var wordAnimator;
 var dictionary; //= "Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua Ut enim ad minim veniam quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur Excepteur sint occaecat cupidatat non proident sunt in culpa qui officia deserunt mollit anim id est laborum".toLowerCase().split(" ");
 var missed = 0;
 var numLives = 5;
+var gameLoaded = false;
 const BOARDWIDTH = 900;
 const BOARDHEIGHT = 600;
+const WORDFREQUENCY = 1000;
+const ANIMATIONFREQUENCY = 20;
 //default:5 === move 5 pixels per animation loop
 const MOVESPEED = 5;
 
@@ -88,8 +91,8 @@ const createWord = function(){
 
 const gameLoop = function(){
   //webpack freaks out if the functions aren't declared in the interval
-  wordCreator = setInterval(function () {createWord()}, 1000);
-  wordAnimator = setInterval(function () {animate()}, 20);
+  wordCreator = setInterval(function () {createWord()}, WORDFREQUENCY);
+  wordAnimator = setInterval(function () {animate()}, ANIMATIONFREQUENCY);
 }
 const findWord = function(s){
   for(let i = 0; i < words.length; i++){
@@ -98,6 +101,15 @@ const findWord = function(s){
       return true;
     }
   }
+}
+const gameSetup = function(){
+  if(!gameLoaded){
+    dictionary = dictionary.toLowerCase().split("\n");
+    for(let i = 0; i < dictionary.length; i++){
+      dictionary[i] = dictionary[i].replace(/[^a-z]/g, "");
+    }
+  }
+  gameLoaded = true;
 }
 
 $(document).ready(function(){
@@ -108,15 +120,12 @@ $(document).ready(function(){
   canvas.height = BOARDHEIGHT;
 
   $("#startgame").click(function(){
-    dictionary = dictionary.toLowerCase().split("\n");
-
-    for(let i = 0; i < dictionary.length; i++){
-      dictionary[i] = dictionary[i].replace(/[^a-z]/g, "");
-    }
     $("#userInput").focus();
+    gameSetup();
     gameLoop();
   });
   $("#inputFile").on("change", function(event){
+    $("#startgame").prop('disabled', false);
     let file = event.target.files[0];
     if(!file){
       return;
