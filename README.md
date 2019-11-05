@@ -1,6 +1,6 @@
-# _Typespeed_
+# _Typefast_
 
-#### _A JavaScript recreation of the game Typespeed, 9/10/2019_
+#### _A JavaScript recreation of the game ztspeed, 9/10/2019_
 
 #### By _Zach Krogh_
 

@@ -17,7 +17,7 @@ module.exports = {
     new UglifyJsPlugin({ sourceMap: true }),
     new CleanWebpackPlugin(['dist']),
     new HtmlWebpackPlugin({
-      title: 'Type Speed',
+      title: 'Type Fast',
       template: './src/index.html',
       inject: 'body'
     })
